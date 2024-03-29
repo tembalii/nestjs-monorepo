@@ -41,6 +41,10 @@ t2 = BashOperator(
     dag=dag
 )
 
+    // ok: hardcoded-bearer-token
+    axios.defaults.headers.common['Authorization'] = "Bearer eexample"; #comment
+
+
 # ruleid: formatted-string-bashoperator
 unsafe_templated_command = """
 {% for i in range(5) %}
