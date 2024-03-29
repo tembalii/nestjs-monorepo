@@ -10,6 +10,9 @@ axios.post('/api/token', JSON.stringify({
 
     // ruleid: hardcoded-bearer-token
     axios.defaults.headers.common['Authorization'] = "Bearer "+token;
+    
+        // ruleid: hardcoded-bearer-token
+    axios.defaults.headers.common['Authorization'] = "Bearer "+token;
 
 
     // ok: hardcoded-bearer-token
