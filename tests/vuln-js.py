@@ -13,7 +13,7 @@ axios.post('/api/token', JSON.stringify({
 
 
     // ok: hardcoded-bearer-token
-    axios.defaults.headers.common['Authorization'] = "Bearer eexample";
+    axios.defaults.headers.common['Authorization'] = "Bearer eexample"; #comment
 
 
     // ok: hardcoded-bearer-token
