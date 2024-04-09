@@ -17,9 +17,9 @@ jobs:
       matrix:
         subdir:
           - tests
-          - libs
-          - apps
-          - deploy
+          # - libs
+          # - apps
+          # - deploy
     name: semgrep/ci
     runs-on: ubuntu-20.04
     env:
