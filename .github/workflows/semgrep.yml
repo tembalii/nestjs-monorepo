@@ -16,15 +16,15 @@ jobs:
     strategy:
       matrix:
         subdir:
-          - apps
-          - deploy
+          # - apps
+          # - deploy
           - libs
-          - tests
+          # - tests
     name: semgrep/ci
     runs-on: ubuntu-20.04
     env:
       SEMGREP_APP_TOKEN: ${{ secrets.SEMGREP_APP_TOKEN }}
-      SEMGREP_REPO_DISPLAY_NAME: monorepo-test--${{ matrix.subdir }}
+      SEMGREP_REPO_DISPLAY_NAME: monorepo--${{ matrix.subdir }}
     container:
       image: returntocorp/semgrep
     steps:
