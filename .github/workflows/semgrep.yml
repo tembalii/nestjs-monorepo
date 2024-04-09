@@ -16,8 +16,8 @@ jobs:
     strategy:
       matrix:
         subdir:
-          # - apps
-          # - deploy
+          - apps
+          - deploy
           - libs
           - tests
     name: semgrep/ci
