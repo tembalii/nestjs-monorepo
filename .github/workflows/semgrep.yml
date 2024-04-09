@@ -18,8 +18,8 @@ jobs:
         subdir:
           # - apps
           # - deploy
-          # - libs
-          - tests
+          - libs
+          # - tests
     name: semgrep/ci
     runs-on: ubuntu-20.04
     env:
@@ -29,4 +29,4 @@ jobs:
       image: returntocorp/semgrep
     steps:
     - uses: actions/checkout@v3
-    - run: semgrep ci
+    - run: semgrep ci --include=${{ matrix.subdir }}
