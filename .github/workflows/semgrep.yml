@@ -16,17 +16,17 @@ jobs:
     strategy:
       matrix:
         subdir:
-          - apps
+          # - apps
           # - deploy
           # - libs
-          # - tests
+          - tests
     name: semgrep/ci
     runs-on: ubuntu-20.04
     env:
       SEMGREP_APP_TOKEN: ${{ secrets.SEMGREP_APP_TOKEN }}
-      SEMGREP_REPO_DISPLAY_NAME: apps
+      SEMGREP_REPO_DISPLAY_NAME: tests
     container:
       image: returntocorp/semgrep
     steps:
     - uses: actions/checkout@v3
-    - run: semgrep ci 
+    - run: semgrep ci --include=tests/
