@@ -1,6 +1,11 @@
-const jsSHA = require("jssha");
+import * as Promise from "bluebird";
 
-// ok: jssha-sha1
-new jsSHA("SHA-512", "TEXT", { encoding: "UTF8" });
-// ruleid: jssha-sha1
-new jsSHA("SHA-1", "TEXT", { encoding: "UTF8" });
+function bad1(input) {
+  // ruleid: tofastproperties-code-execution
+  util.toFastProperties(input);
+}
+
+function ok1() {
+  // ok: tofastproperties-code-execution
+  util.toFastProperties("smth hardcoded");
+}
