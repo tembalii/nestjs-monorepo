@@ -1,4 +1,4 @@
-name: Semgrep
+name: Semgrep1
 on: 
   workflow_dispatch: {}
   pull_request: {}
@@ -12,7 +12,7 @@ on:
     # random HH:MM to avoid a load spike on GitHub Actions at 00:00
     - cron: 55 14 * * *
 jobs:
-  semgrep1:
+  semgrep:
     strategy:
       matrix:
         subdir:
