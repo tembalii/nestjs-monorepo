@@ -30,3 +30,22 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - run: semgrep ci --include=${{ matrix.subdir }}
+
+  semgrep:
+    strategy:
+      matrix:
+        subdir:
+          # - apps
+          # - deploy
+          - libs
+          # - tests
+    name: semgrep/ci
+    runs-on: ubuntu-20.04
+    env:
+      SEMGREP_APP_TOKEN: ${{ secrets.SEMGREP_APP_TOKEN }}
+      SEMGREP_REPO_DISPLAY_NAME: monorepo--${{ matrix.subdir }}
+    container:
+      image: returntocorp/semgrep
+    steps:
+    - uses: actions/checkout@v3
+    - run: semgrep ci --exclude=${{ matrix.subdir }}
