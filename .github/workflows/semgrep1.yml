@@ -29,6 +29,6 @@ jobs:
       image: returntocorp/semgrep
     steps:
     - uses: actions/checkout@v3
-    - run: semgrep ci --include=${{ matrix.subdir }} 
+    - run: semgrep ci --exclude=${{ matrix.subdir }} 
 
 
