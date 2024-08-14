@@ -58,4 +58,4 @@ jobs:
       with:
         name: combined-semgrep-report  # Name of the combined report artifact
         path: combined_report.json  # Path to the combined report file
-        retention-days: 14  # Retention period for the combined report artifact
+        retention-days: 14  # Retention period for the combined report artifacts
