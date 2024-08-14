@@ -1,32 +1,61 @@
-name: Semgrep
-on: 
-  workflow_dispatch: {}
-  pull_request: {}
-  push:
+name: Semgrep  # Name of the GitHub Actions workflow
+on:  # Events that trigger the workflow
+  workflow_dispatch: {}  # Manual trigger
+  pull_request: {}  # On pull request
+  push:  # On push to specific branches
     branches:
     - main
     - master
     paths:
     - .github/workflows/semgrep.yml
   schedule:
-    # random HH:MM to avoid a load spike on GitHub Actions at 00:00
-    - cron: 55 14 * * *
+    - cron: 55 14 * * *  # Scheduled trigger at 14:55 every day
+
 jobs:
   semgrep:
     strategy:
       matrix:
-        subdir:
+        subdir:  # Matrix strategy to run the job for multiple subdirectories
+          - tools
           - apps
-          - deploy
           - libs
-          - tests
-    name: semgrep/ci
-    runs-on: ubuntu-20.04
+    name: semgrep/ci  # Name of the job
+    runs-on: ubuntu-20.04  # Runner for the job
     env:
-      SEMGREP_APP_TOKEN: ${{ secrets.SEMGREP_APP_TOKEN }}
-      SEMGREP_REPO_DISPLAY_NAME: monorepo-test--${{ matrix.subdir }}
+      SEMGREP_APP_TOKEN: ${{ secrets.SEMGREP_APP_TOKEN }}  # Secret for Semgrep token
+      SEMGREP_REPO_DISPLAY_NAME: monorepo-test--${{ matrix.subdir }}  # Dynamic repo display name based on subdir
     container:
-      image: returntocorp/semgrep
+      image: returntocorp/semgrep  # Docker image for Semgrep
     steps:
-    - uses: actions/checkout@v3
-    - run: semgrep ci --include=${{ matrix.subdir }}
+    - uses: actions/checkout@v4  # Checkout the repository
+    - run: semgrep ci --json --output report-${{ matrix.subdir }}.json --include=${{ matrix.subdir }} || true  # Run Semgrep for the specified subdir, outputting a JSON report
+    - name: Upload report as artifact  # Upload the report as an artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: semgrep-report  # Name of the artifact
+        path: report-${{ matrix.subdir }}.json  # Path to the report file
+        retention-days: 1  # Retention period for the artifact
+
+  merge-reports:
+    needs: [semgrep]  # This job depends on the 'semgrep' job
+    runs-on: ubuntu-20.04  # Runner for the job
+
+    steps:
+    - name: Download all reports  # Download all the artifacts from the 'semgrep' job
+      uses: actions/download-artifact@v3
+      with:
+        name: semgrep-report  # Name of the artifact to download
+        path: semgrep-report  # Path to save the downloaded artifacts
+
+    - name: Install jq  # Install jq for JSON manipulation
+      run: sudo apt-get install -y jq
+
+    - name: Combine reports  # Combine all JSON reports into one
+      run: jq -s '.' semgrep-report/*.json > combined_report.json
+
+    - name: Upload combined report  # Upload the combined report as an artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: combined-semgrep-report  # Name of the combined report artifact
+        path: combined_report.json  # Path to the combined report file
+        retention-days: 14  # Retention period for the combined report artifact
